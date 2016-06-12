@@ -9,8 +9,9 @@ import routes from './src/Routes';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+app.use('/', express.static(__dirname + '/public/'))
 
- app.use(function renderApp(req, res) {
+app.get('*', function renderApp(req, res) {
 
 match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
     if (error) {
@@ -19,11 +20,24 @@ match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      const html = ReactDOMServer.renderToString(
-        <RouterContext {...renderProps} />
-      );
- res.send(`<!doctype html>
-` + html);
+
+const renderedHTML = ReactDOMServer.renderToString(<RouterContext {...renderProps} />);
+const html = `<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Bla Bla</title>
+</head>
+<body>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css"/>
+<div id="content">
+${renderedHTML}
+</div>
+<script type="application/javascript" src="/dist/bundle.js"/>
+</body>
+</html>`
+ res.send(`<!doctype html>` + html);
     } else {
       res.status(404).send('Not Found');
     }

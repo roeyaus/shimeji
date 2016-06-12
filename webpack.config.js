@@ -1,9 +1,14 @@
 // webpack.config.js
+
+var path    = require('path');
+
 module.exports = {
   entry: './client.js',
-  output: {
-    filename: 'bundle.js'       
-  },
+ output: {
+    path: __dirname + '/public/dist',
+    filename: 'bundle.js',
+    publicPath: '/dist/'
+  },  
   devtool: 'source-map',
  module: {
 preLoaders: [
