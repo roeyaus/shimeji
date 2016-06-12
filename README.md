@@ -11,4 +11,6 @@ to run :
 
 3) run "node index.js"
 
-4) hit http://localhost:4000
+4) in another terminal (in the same dir) run : webpack --watch (this creates bundle.js which the website serves)
+
+5) in chrome, hit http://localhost:4000
